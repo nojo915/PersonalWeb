@@ -1,44 +1,22 @@
-norajones/Personal:
+norajones/blah:
 
-    PkgInclude:
-      - '*'
-    
-    Build:
-      - echo "Begin Build"
-      - npm install
-    
-    PreInstall:
-      - echo "Begin PreInstall"
-      - sudo apt-get -y update
-      #Install MongoDB
-      - sudo apt-get install -y mongodb-server
-      #Install Node.js v0.10.40
-      - sudo apt-get -y install build-essential libssl-dev git curl
-      - cd /tmp
-      - wget http://nodejs.org/dist/v0.10.40/node-v0.10.40-linux-x64.tar.gz
-      - tar xvzf node-v0.10.40-linux-x64.tar.gz
-      - sudo rm -rf /opt/nodejs
-      - sudo mv node-v0.10.40-linux-x64 /opt/nodejs
-      - sudo ln -sf /opt/nodejs/bin/node /usr/bin/node
-      - sudo ln -sf /opt/nodejs/bin/npm /usr/bin/npm
-      - sudo apt-get install -y software-properties-common
-      - sudo apt-get install -y python-software-properties python g++ make
-      #Install Meteor
-      - 'if [ -a /usr/local/bin/meteor ]; then'
-      -     echo "Meteor is already installed"
-      - else
-      -     sudo curl https://install.meteor.com | /bin/sh
-      - fi
-    
-    PostInstall:
-      - echo "Begin PostInstall"
-      #Build Meteor App
-      - /usr/local/bin/meteor build ./build --directory
-      - cd build/bundle/programs/server/
-      - npm install
-    
-    Exec:
-      - export PORT=3000
-      - export MONGO_URL=mongodb://localhost:27017/todos
-      - export ROOT_URL=https://
-      - /usr/bin/node build/bundle/main.js
+  #Learn about the distelli-manifest.yml at https://www.distelli.com/docs/reference/distelli-manifest
+  PkgInclude:
+    - '*'
+
+  Build:
+    - echo "Begin Build"
+    - npm install
+    - npm test
+
+  PreInstall:
+    - echo "Begin PreInstall"
+    - sudo apt-get -y update
+    - sudo apt-get -y install nodejs
+    - sudo apt-get -y install npm
+
+  PostInstall:
+    - echo "Begin PostInstall"
+
+  Exec:
+    - /usr/bin/nodejs app.js
